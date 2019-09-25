@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.baizhi.dao.EmployeesDao">
+    <insert id="insert" parameterType="Employees">
+        insert into t_employees(picture,name,age,salary,did) values(#{picture},#{name},#{age},#{salary},#{did})
+    </insert>
+    <resultMap id="map1" type="Employees">
+        <id column="eid" property="id"/>
+        <result column="epicture" property="picture"/>
+        <result column="ename" property="name"/>
+        <result column="esalary" property="salary"/>
+        <result column="eage" property="age"/>
+        <result column="adid" property="did"/>
+        <collection property="department" ofType="Department">
+            <id column="did" property="id"/>
+            <result column="dnumber" property="number"/>
+            <result column="dname" property="name"/>
+        </collection>
+    </resultMap>
+    <select id="selectAll" resultMap="map1">
+        select e.id eid,e.picture epicture,e.name ename,e.salary esalary,e.age eage,e.did edid,d.id did,d.number dnumber,d.name dname from t_employees e LEFT JOIN t_department d on e.did=d.id where d.id=#{id}
+    </select>
+    <delete id="delete" >
+        delete from t_employees where id=#{id}
+    </delete>
+    <select id="selectOne" resultMap="map1">
+        select e.id eid,e.picture epicture,e.name ename,e.salary esalary,e.age eage,e.did edid,d.id did,d.number dnumber,d.name dname from t_employees e LEFT JOIN t_department d on e.did=d.id where e.id=#{id}
+    </select>
+    <update id="update" parameterType="Employees">
+        update t_employees set picture=#{picture},name=#{name},salary=#{salary},age=#{age},did=#{did} where id=#{id}
+    </update>
+</mapper>
